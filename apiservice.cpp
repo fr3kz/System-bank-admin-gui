@@ -83,11 +83,13 @@ QJsonDocument apiservice::post_auth(QString url_) {
 }
 
 QJsonDocument apiservice::get(QString url_) {
+    // Utwórz QNetworkAccessManager jako zmienną składową klasy, aby uniknąć wycieku pamięci
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+
     QUrl url(url_);
     QNetworkRequest request(url);
 
-    QString csrf = get_csrf();
+    QString csrf = "j5f2ZRbXPfWcXWUhIOqYTfcljIsAFVskBA6QomHKXEBnWG7gV6vughB8U7N2A1Xz";
     QByteArray csrfbyte = csrf.toUtf8();
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
@@ -98,18 +100,28 @@ QJsonDocument apiservice::get(QString url_) {
     QEventLoop loop;
     QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
 
+    loop.exec(); // Czekaj na zakończenie odpowiedzi
+
     QJsonDocument datajson;
 
     if (reply->error() == QNetworkReply::NoError) {
         QByteArray data = reply->readAll();
         QJsonDocument jsonDocument = QJsonDocument::fromJson(data);
 
-        return jsonDocument;
+        if (jsonDocument.isNull()) {
+            qDebug() << "Błąd parsowania JSON: Nieprawidłowy format danych";
+        } else {
+            // ... twój kod obsługi prawidłowego JSON ...
+            return jsonDocument;
+        }
     } else {
-        qDebug() << reply->errorString();
+        qDebug() << "Błąd zapytania: " << reply->errorString();
     }
 
     reply->deleteLater();
+
+    // Zwróć pustą dokumentację JSON w przypadku błędu
+    return QJsonDocument();
 }
 
 QJsonDocument apiservice::get_auth(QString url_) {

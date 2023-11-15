@@ -10,11 +10,16 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), apiService(new apiservice(this))
 {
     ui->setupUi(this);
+    QJsonDocument response = apiService->get("http://127.0.0.1:8000/adminpanel/user_count");
+    QJsonObject jobj = response.object();
+
+    qDebug() << jobj;
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete apiService;
 }
 
 void MainWindow::on_pushButton_clicked()
