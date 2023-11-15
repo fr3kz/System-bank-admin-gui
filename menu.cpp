@@ -13,13 +13,27 @@ Menu::Menu(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    //wyswietlenie informacji w qeventloop
 
+    QJsonDocument response = api_service->get("http://127.0.0.1:8000/adminpanel/user_count");
+    QJsonObject jobj = response.object();
+
+    int value = jobj["value"].toInt();
+    std::string t = "ilosc pracownikow: " + std::to_string(value);
+    ui->label->setText(QString::fromStdString(t));
+
+
+
+
+
+/*
+    ///nie dziala
     QFuture<void> wynik1 = QtConcurrent::run(&Menu::funkcja1, this);
     QFuture<void> wynik2 = QtConcurrent::run(&Menu::funkcja2, this);
 
     // Czekaj na zakończenie wszystkich funkcji
     wynik1.waitForFinished();
-    wynik2.waitForFinished();
+    wynik2.waitForFinished();*/
 }
 
 Menu::~Menu()
@@ -32,7 +46,7 @@ void Menu::funkcja1()
 {
     QJsonDocument response = api_service->get("http://127.0.0.1:8000/adminpanel/user_count");
     QJsonObject jobj = response.object();
-    qDebug() << jobj;
+    qDebug() << jobj["value"].toInt();
 }
 
 void Menu::funkcja2()
