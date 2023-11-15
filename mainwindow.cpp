@@ -1,49 +1,15 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QUrlQuery>
+#include <QByteArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QSettings>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    : QMainWindow(parent), ui(new Ui::MainWindow), apiService(new apiservice(this))
 {
     ui->setupUi(this);
-    QUrlQuery postData;
-    postData.addQueryItem("account1_id", "111111");
-    postData.addQueryItem("account2_id", "333333");
-    postData.addQueryItem("amount","1");
-    postData.addQueryItem("title","test z innego apki");
-
-    // Utwórz obiekt managera i żądanie
-    QNetworkAccessManager *manager = new QNetworkAccessManager;
-    QNetworkRequest request(QUrl("http://127.0.0.1:8000/accounts/transfer/"));
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-
-    // Wysyłanie żądania POST
-    QNetworkReply *reply = manager->post(request, postData.toString(QUrl::FullyEncoded).toUtf8());
-
-    // Oczekiwanie na zakończenie żądania
-    QEventLoop loop;
-    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    loop.exec();
-
-    // Obsługa odpowiedzi
-    QString data;
-
-    if (reply->error() == QNetworkReply::NoError) {
-        QByteArray responseData = reply->readAll();
-        data = QString(responseData);
-        // qDebug() << data;
-    } else {
-        qDebug() << "Error: " << reply->errorString();
-    }
-
-    // Usuń obiekt odpowiedzi i managera
-    reply->deleteLater();
-    manager->deleteLater();
-
 }
 
 MainWindow::~MainWindow()
@@ -51,3 +17,32 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::on_pushButton_clicked()
+{
+    QString username = ui->lineEdit->text();
+    QString password = ui->lineEdit_2->text();
+
+    QJsonObject transferData;
+    transferData["username"] = username;
+    transferData["password"] = password;
+
+    QJsonDocument postDataJson(transferData);
+    QByteArray postDataByteArray = postDataJson.toJson();
+
+    QJsonDocument response = apiService->post("http://127.0.0.1:8000/login/",postDataByteArray);
+    QJsonObject jobj = response.object();
+    qDebug() << response;
+
+    //obsluga wyjatkow
+
+    QSettings settings("bank_admin","bank_admin");
+    settings.setValue("csrf",jobj["csrf"].toString());
+    settings.setValue("sessionid",jobj["sessionid"].toString());
+    settings.setValue("userid",jobj["userid"].toString());
+
+
+    Menu *menu = new Menu(this);
+    hide();
+    menu->show();
+
+}

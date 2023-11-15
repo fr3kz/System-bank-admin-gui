@@ -1,8 +1,6 @@
 #ifndef APISERVICE_H
 #define APISERVICE_H
 
-#include <QAbstractItemModel>
-
 #include <QObject>
 #include <QNetworkAccessManager>
 #include <QUrl>
@@ -10,16 +8,24 @@
 #include <QUrlQuery>
 #include <QByteArray>
 #include <QNetworkReply>
-class apiservice : public QAbstractItemModel
+#include <QUrlQuery>
+#include <QJsonDocument>
+#include <QByteArray>
+
+class apiservice : public QObject
 {
     Q_OBJECT
-
 public:
     explicit apiservice(QObject *parent = nullptr);
+    QJsonDocument post(QString url_,QByteArray data);
+    QJsonDocument post_auth(QString url_);
+    QJsonDocument get(QString url_);
+    QJsonDocument get_auth(QString url_);
+    QString get_csrf();
 
 
+signals:
 
-private:
 };
 
 #endif // APISERVICE_H
