@@ -1,5 +1,7 @@
 #include "menu.h"
 #include "ui_menu.h"
+#include "userpanel.h"
+#include "employepanel.h"
 
 #include <QFuture>
 #include <QtConcurrent>
@@ -68,7 +70,7 @@ void Menu::funkcja1()
 
 void Menu::funkcja2()
 {
-    QJsonDocument response = api_service->get("http://127.0.0.1:8000/adminpanel/user_count");
+    QJsonDocument response = api_service->get("http://127.0.0.1:8000/adminpanel/employe_count");
     QJsonObject jobj = response.object();
     qDebug() << jobj;
 }
@@ -79,13 +81,18 @@ void Menu::funkcja2()
 void Menu::on_pushButton_2_clicked()
 {
     // Implementuj logikę dla panelu pracowniczego nowy widok
-
+    employepanel *emppanel = new employepanel(this);
+    hide();
+    emppanel->show();
 }
 
 // Wnioski
 void Menu::on_pushButton_3_clicked()
 {
    //nowy widok i powrot do menu
+    UserPanel *userpanel = new UserPanel(this);
+    //hide();
+    userpanel->show();
 }
 
 // Wyloguj

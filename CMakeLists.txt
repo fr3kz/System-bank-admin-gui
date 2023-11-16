@@ -32,6 +32,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         apiservice.h apiservice.cpp
         menu.h menu.cpp menu.ui
+        userpanel.h userpanel.cpp userpanel.ui
+        employepanel.h employepanel.cpp employepanel.ui
 
 
 
