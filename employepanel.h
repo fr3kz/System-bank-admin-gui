@@ -16,6 +16,11 @@ public:
     explicit employepanel(QWidget *parent = nullptr);
     ~employepanel();
 
+private slots:
+    void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
+
 private:
     Ui::employepanel *ui;
     apiservice *api;

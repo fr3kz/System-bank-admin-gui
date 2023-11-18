@@ -15,7 +15,7 @@ UserPanel::UserPanel(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QSettings settings("firma","nienazwany1");
+    QSettings settings("firma","bank_admin");
 
     QJsonDocument response = api->get("http://127.0.0.1:8000/adminpanel/ticket_list/");
     QJsonArray users_array = response.array();
