@@ -15,7 +15,7 @@ UserPanel::UserPanel(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QSettings settings("firma","bank_admin");
+    QSettings settings("bank_admin","bank_admin");
 
     QJsonDocument response = api->get("http://127.0.0.1:8000/adminpanel/ticket_list/");
     QJsonArray users_array = response.array();
@@ -34,13 +34,6 @@ UserPanel::UserPanel(QWidget *parent) :
 
         }
     }
-
-
-    /*for (const auto &transferData : users_list) {
-        qDebug() << "ID:" << transferData["id"] << "Account1:" << transferData["username"] << "Account2:";
-    }*/
-
-    //wyswietlanie listy obietkow na kliknecie otwarcie nowego okna z dwoma przyciskami
 
     QListWidget *listwidget = ui->listWidget;
 

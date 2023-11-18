@@ -80,7 +80,6 @@ void Menu::funkcja2()
 // Panel pracowniczy
 void Menu::on_pushButton_2_clicked()
 {
-    // Implementuj logikę dla panelu pracowniczego nowy widok
     employepanel *emppanel = new employepanel(this);
     //hide();
     emppanel->show();

@@ -18,7 +18,7 @@ class apiservice : public QObject
 public:
     explicit apiservice(QObject *parent = nullptr);
     QJsonDocument post(QString url_,QByteArray data);
-    QJsonDocument post_auth(QString url_);
+    QJsonDocument post_auth(QString url_,QByteArray data);
     QJsonDocument get(QString url_);
     QJsonDocument get_auth(QString url_);
     QString get_csrf();

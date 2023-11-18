@@ -34,7 +34,7 @@ void MainWindow::on_pushButton_clicked()
     QJsonObject jobj = response.object();
     qDebug() << response;
 
-    //obsluga wyjatkow
+    //obsluga wyjatkow do zrobienia
 
     QSettings settings("bank_admin","bank_admin");
     settings.setValue("csrf",jobj["csrf"].toString());

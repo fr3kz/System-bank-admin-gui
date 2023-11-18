@@ -14,7 +14,7 @@ employepanel::employepanel(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QSettings settings("firma","bank_admin");
+    QSettings settings("bank_admin","bank_admin");
 
     QJsonDocument response = api->get("http://127.0.0.1:8000/adminpanel/show_employess/");
     QJsonArray users_array = response.array();
@@ -34,13 +34,6 @@ employepanel::employepanel(QWidget *parent) :
         }
     }
 
-
-    /*for (const auto &transferData : users_list) {
-        qDebug() << "ID:" << transferData["id"] << "Account1:" << transferData["username"] << "Account2:";
-    }*/
-
-    //wyswietlanie listy obietkow na kliknecie otwarcie nowego okna z dwoma przyciskami
-
     QListWidget *listwidget = ui->listWidget;
 
     for(auto data:users_list){
@@ -56,8 +49,6 @@ employepanel::employepanel(QWidget *parent) :
     }
 
     listwidget->show();
-
-
 
 }
 

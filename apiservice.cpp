@@ -15,7 +15,7 @@ QJsonDocument apiservice::post(QString url_, QByteArray data) {
     QUrl url(url_);
     QNetworkRequest request(url);
 
-    QString csrf = "j5f2ZRbXPfWcXWUhIOqYTfcljIsAFVskBA6QomHKXEBnWG7gV6vughB8U7N2A1Xz";
+    QString csrf = get_csrf();
     QByteArray csrfbyte = csrf.toUtf8();
 
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -44,7 +44,7 @@ QJsonDocument apiservice::post(QString url_, QByteArray data) {
     reply->deleteLater();
 }
 
-QJsonDocument apiservice::post_auth(QString url_) {
+QJsonDocument apiservice::post_auth(QString url_,QByteArray data) {
 
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
     QUrl url(url_);
@@ -56,16 +56,9 @@ QJsonDocument apiservice::post_auth(QString url_) {
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setRawHeader("X-CSRFToken", csrfbyte);
 
-    QJsonObject transferData;
-    transferData["account1_id"] = "111111";
-    transferData["account2_id"] = "333333";
-    transferData["amount"] = 1;
-    transferData["title"] = "test z innego apki";
 
-    QJsonDocument postDataJson(transferData);
-    QByteArray postDataByteArray = postDataJson.toJson();
 
-    QNetworkReply *reply = manager->post(request, postDataByteArray);
+    QNetworkReply *reply = manager->post(request, data);
 
     QEventLoop loop;
     QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
@@ -74,14 +67,16 @@ QJsonDocument apiservice::post_auth(QString url_) {
     if (reply->error() == QNetworkReply::NoError) {
         QByteArray responseData = reply->readAll();
         QJsonDocument jsonDocument = QJsonDocument::fromJson(responseData);
-
         return jsonDocument;
+
     } else {
+        QByteArray responseData = reply->readAll();
+        QJsonDocument jsonDocument = QJsonDocument::fromJson(responseData);
+        return jsonDocument;
         qDebug() << "Error: " << reply->errorString();
     }
 
     reply->deleteLater();
-    // Modify the return type as needed
 }
 
 QJsonDocument apiservice::get(QString url_) {
@@ -113,7 +108,7 @@ QJsonDocument apiservice::get(QString url_) {
         if (jsonDocument.isNull()) {
             qDebug() << "Błąd parsowania JSON: Nieprawidłowy format danych";
         } else {
-            // ... twój kod obsługi prawidłowego JSON ...
+
             return jsonDocument;
         }
     } else {
@@ -122,7 +117,7 @@ QJsonDocument apiservice::get(QString url_) {
 
     reply->deleteLater();
 
-    // Zwróć pustą dokumentację JSON w przypadku błędu
+
     return QJsonDocument();
 }
 
@@ -153,7 +148,7 @@ QJsonDocument apiservice::get_auth(QString url_) {
     QEventLoop loop;
     QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
 
-    loop.exec(); // Czekaj na zakończenie odpowiedzi
+    loop.exec();
 
     QJsonDocument datajson;
 
@@ -164,7 +159,7 @@ QJsonDocument apiservice::get_auth(QString url_) {
         if (jsonDocument.isNull()) {
             qDebug() << "Błąd parsowania JSON: Nieprawidłowy format danych";
         } else {
-            // ... twój kod obsługi prawidłowego JSON ...
+
             return jsonDocument;
         }
     } else {
@@ -173,7 +168,6 @@ QJsonDocument apiservice::get_auth(QString url_) {
 
     reply->deleteLater();
 
-    // Zwróć pustą dokumentację JSON w przypadku błędu
     return QJsonDocument();
 }
 
@@ -195,7 +189,7 @@ QString apiservice::get_csrf() {
     QEventLoop loop;
     QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
 
-    loop.exec(); // Czekaj na zakończenie odpowiedzi
+    loop.exec();
 
 
     if (reply->error() == QNetworkReply::NoError) {
@@ -214,6 +208,6 @@ QString apiservice::get_csrf() {
 
     reply->deleteLater();
 
-    // Zwróć pustą dokumentację JSON w przypadku błędu
+
     return QString();
 }
