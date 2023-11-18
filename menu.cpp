@@ -18,13 +18,13 @@ Menu::Menu(QWidget *parent) :
 
     //wyswietlenie informacji w qeventloop
 
-    QJsonDocument response = api_service->get("http://127.0.0.1:8000/adminpanel/user_count");
+    QJsonDocument response = api_service->get_auth("http://127.0.0.1:8000/adminpanel/user_count");
     QJsonObject jobj = response.object();
 
-    QJsonDocument response_1 = api_service->get("http://127.0.0.1:8000/adminpanel/employe_count");
+    QJsonDocument response_1 = api_service->get_auth("http://127.0.0.1:8000/adminpanel/employe_count");
     QJsonObject jobj_1 = response_1.object();
 
-    QJsonDocument response_2 = api_service->get("http://127.0.0.1:8000/adminpanel/ticket_count");
+    QJsonDocument response_2 = api_service->get_auth("http://127.0.0.1:8000/adminpanel/ticket_count");
     QJsonObject jobj_2 = response_2.object();
 
 
