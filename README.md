@@ -21,18 +21,18 @@
    - Przeglądanie statystyk dotyczących działania aplikacji.
 
 5. **Integracja z API:**
-   - Projekt wykorzystuje bibliotekę **ApiService** do wymiany danych z API Systemu Bankowego.
+   - Projekt wykorzystuje bibliotekę moją biblioteke **ApiService** do wymiany danych z API Systemu Bankowego.
 
 ## Zdjęcia
 
 1. **Panel Logowania:**
-   ![Panel Logowania](/screenshots/login_panel.png)
+   ![Panel Logowania](https://github.com/fr3kz/System-bank-admin-gui/blob/main/screenshots/Zrzut%20ekranu%202023-11-19%20o%2011.31.04.png)![Panel Logowania](https://github.com/fr3kz/System-bank-admin-gui/blob/main/screenshots/Zrzut%20ekranu%202023-11-19%20o%2011.32.49.png)
 
 2. **Lista Pracowników:**
-   ![Lista Pracowników](/screenshots/employee_list.png)
+   ![Lista Pracowników](https://github.com/fr3kz/System-bank-admin-gui/blob/main/screenshots/Zrzut%20ekranu%202023-11-19%20o%2011.33.15.png)
 
 3. **Wnioski o Utworzenie Konta:**
-   ![Wnioski o Utworzenie Konta](/screenshots/account_requests.png)
+   ![Wnioski o Utworzenie Konta](https://github.com/fr3kz/System-bank-admin-gui/blob/main/screenshots/Zrzut%20ekranu%202023-11-19%20o%2011.33.46.png)
 
 4. **Statystyki Aplikacji:**
    ![Statystyki Aplikacji](/screenshots/app_statistics.png)
