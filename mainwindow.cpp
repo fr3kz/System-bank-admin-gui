@@ -5,6 +5,9 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QSettings>
+#include <QMessageBox>
+#include <QJsonArray>
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow), apiService(new apiservice(this))
@@ -23,6 +26,12 @@ void MainWindow::on_pushButton_clicked()
     QString username = ui->lineEdit->text();
     QString password = ui->lineEdit_2->text();
 
+    if(username == "" || password == "")
+    {
+        QMessageBox::critical(this,"Error","Wszystkie pola musza byc wypelnione");
+        return;
+    }
+
     QJsonObject transferData;
     transferData["username"] = username;
     transferData["password"] = password;
@@ -33,17 +42,26 @@ void MainWindow::on_pushButton_clicked()
     QJsonDocument response = apiService->post("http://127.0.0.1:8000/login/",postDataByteArray);
     QJsonObject jobj = response.object();
     qDebug() << response;
+    if(jobj["value"].toString() != "")
+    {
+        qDebug() << jobj["error"].toString();
+        QJsonObject errorobj = jobj["error"].toObject();
+        QJsonArray valueArray = errorobj["value"].toArray();
 
-    //obsluga wyjatkow do zrobienia
+        QMessageBox::critical(this,"Error",valueArray[0].toString());
+        return;
+    }else{
+        QSettings settings("bank_admin","bank_admin");
+        settings.setValue("csrf",jobj["csrf"].toString());
+        settings.setValue("sessionid",jobj["sessionid"].toString());
+        settings.setValue("userid",jobj["userid"].toString());
 
-    QSettings settings("bank_admin","bank_admin");
-    settings.setValue("csrf",jobj["csrf"].toString());
-    settings.setValue("sessionid",jobj["sessionid"].toString());
-    settings.setValue("userid",jobj["userid"].toString());
 
+        Menu *menu = new Menu(this);
+        hide();
+        menu->show();
+        return;
+    }
 
-    Menu *menu = new Menu(this);
-    hide();
-    menu->show();
 
 }
